@@ -36,6 +36,35 @@ public class CalculoNumerico {
 		}		
 	}
 	
+	public static String divisao_sucessiva(int decimal)
+	{
+		String binaryRepresentation = "";
+		while(decimal != 0)
+		{
+			int value = decimal % 2;
+			binaryRepresentation = String.valueOf(value) + binaryRepresentation;
+			decimal = decimal / 2;
+		}
+		return binaryRepresentation;
+	}
+	
+	public static String multiplicacao_sucessiva(double fracao)
+	{
+		String binaryRepresentation = "";
+		if(fracao < 1)
+		{
+			binaryRepresentation = "0,";
+		}
+		while(fracao != 0 && binaryRepresentation.length() < 2000)
+		{
+			fracao = fracao * 2;
+			int decimal = (int)fracao;
+			binaryRepresentation = binaryRepresentation + String.valueOf(decimal);
+			fracao = fracao - decimal;
+		}
+		return binaryRepresentation;
+	}
+	
 	
 	public static int conversaoInteiroBinarioToDecimal(String binaryValue)
 	{
