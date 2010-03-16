@@ -36,6 +36,13 @@ public class CalculoNumerico {
 		}		
 	}
 	
+	public static String decimalToBinary(float decimal)
+	{
+		String leftSide = divisao_sucessiva((int)decimal);
+		String rightSide = multiplicacao_sucessiva(decimal - (int)decimal);
+		return leftSide + "," + rightSide;
+	}
+	
 	public static String divisao_sucessiva(int decimal)
 	{
 		String binaryRepresentation = "";
