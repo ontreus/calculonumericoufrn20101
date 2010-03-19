@@ -80,15 +80,20 @@ public class Teste {
 //			System.out.println();
 //				
 //		}
-		//double[][] m1 = {{1,4,7},{2,5,8},{3,6,11}};
+//		double[][] m1 = {{1,4,7},{2,5,8},{3,6,11}};
 //		double[][] m1 = {{1,4,7},{0,-3,-6},{0,-6,-10}};
 //		double [][] m2 = CalculoNumerico.transformadaDeGauss(m1, 1);
 //		CalculoNumerico.printMatriz(m2);
 		//double[][] m2 = {{12},{15},{20}};
 		//CalculoNumerico.obterMatrizLInversaE_UdaFatoracaoLU(m1, m2);
 		//CalculoNumerico.fatoracaoLU(m1, m2);
-		double[][] m3 = {{0.0030,30.0000},{1.0000,4.0000}};
-		CalculoNumerico.troca_linha(m3);
+		//double[][] m3 = {{0.0030,30.0000},{1.0000,4.0000}};
+		//CalculoNumerico.troca_linha(m3);
+		//CalculoNumerico.algoritmoPivotacaoParcial(m1);
+		//System.out.println(Math.sqrt(81));
+		//CalculoNumerico.troca_linha(m1);
+		double[][] m5 = {{10,20,30},{20,45,80},{30,80,171}};
+		CalculoNumerico.cholesky(m5);
 	}
 
 }

@@ -231,14 +231,94 @@ public class CalculoNumerico {
 			{
 				if(matriz[j][i] > matriz[i][i])
 				{
-					double temp = matriz[i][i];
-					matriz[i][i] = matriz[j][i];
-					matriz[j][i] = temp;
+					for(int z = 0 ; z < matriz.length ; z++)
+					{
+						double temp = matriz[j][z];
+						matriz[j][z] = matriz[i][z];
+						matriz[i][z] = temp;
+					}
 				}
 			}
 		}
 		printMatriz(matriz);
 		return matriz;
+	}
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public static double[][] cholesky(double[][] a)
+	{
+		double[][] r = a;
+		for(int k=0 ; k < a.length ; k++)
+		{
+			double primeiroSomatorio = 0;
+			for(int p = 0 ; p < k ; p++)
+			{
+				primeiroSomatorio += Math.pow(r[k][p], 2);
+			}
+			r[k][k] = Math.sqrt( r[k][k] - primeiroSomatorio );
+			printMatriz(r);
+			System.out.println();
+			for(int i = k + 1 ; i < a.length ; i++)
+			{
+				double segundoSomatorio = 0;
+				for(int p = 0 ; p < k ; p++)
+				{
+					segundoSomatorio += r[i][p] * r[k][p];
+				}
+				r[i][k] = (r[i][k] - segundoSomatorio) / r[k][k];
+				r[k][i] = r[i][k];
+			}			
+		}
+		printMatriz(r);
+		return r;
+	}
+	
+	
+	
+	
+	/**
+	 * Algoritmo do Professor
+	 * @param a
+	 * @return
+	 */
+	public static double[][] algoritmoPivotacaoParcial(double [][] a)
+	{
+		int p = 0;
+		double[][] w = new double[a.length][1]; 
+		for(int k = 0; k < a.length-1 ; k++)
+		{
+			for(int j = k + 1 ; j < a.length ; j++)
+			{
+				if(a[j][k] > a[k][k])
+				{
+					p = j;
+				}
+			}
+			for(int j = k ; j < a.length ; j++)
+			{
+				double temp = a[k][j];
+				a[k][j] = a[p][j];
+				a[p][j] = temp;			
+			}
+			for(int j = k + 1; j < a.length ; j++)
+			{
+				w[j][0] = a[k][j];				
+			}
+			for(int i = k + 1 ; i < a.length ; i++)
+			{
+				double n = a[i][k] / a[k][k];
+				a[i][k] = n;
+				for(int j = k + 1 ; j < a.length ; j++)
+				{
+					a[i][j] = a[i][j] - n * w[j][0];					
+				}				
+			}
+		}
+		printMatriz(a);
+		return a;
 	}
 	
 	
