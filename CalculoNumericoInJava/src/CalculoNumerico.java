@@ -373,7 +373,7 @@ public class CalculoNumerico {
 		String binaryRepresentation = "";
 		if(fracao < 1)
 		{
-			binaryRepresentation = "0,";
+			binaryRepresentation = ",";
 		}
 		while(fracao != 0 && binaryRepresentation.length() < 2000)
 		{
@@ -417,6 +417,32 @@ public class CalculoNumerico {
 		}
 		valor = valor/2;
 		return valor;
+	}
+	
+	public static float[] multiplicarMatrizes(
+											  float[] multiplicadora, 
+											  int nLinhasMultiplicadora, 
+											  float[] multiplicado,
+						  					  int nLinhasMultiplicado)
+	{
+		if(multiplicadora.length % nLinhasMultiplicadora != 0 || multiplicado.length % nLinhasMultiplicado != 0 )
+		{
+			System.out.println("O Tamnho de linhas não condiz com o tamanho da matriz");
+		}
+		
+		int nColunasMultiplicadora = multiplicadora.length/nLinhasMultiplicadora;
+		int nColunasMultiplicado = multiplicado.length/nLinhasMultiplicado;
+		for(int i = 0 ; i < nLinhasMultiplicadora ; i++)
+		{
+			for(int j = 0 ; j < nColunasMultiplicadora ; i++ )
+			{
+				for(int k = 0 ; k < nLinhasMultiplicadora ; i++)
+				{
+					
+				}
+			}
+		}		
+		return null;		
 	}
 	
 	public static float binaryToDecimal(String binaryValue)
