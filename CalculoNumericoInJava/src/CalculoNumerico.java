@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -10,7 +11,7 @@ import java.util.HashMap;
  */
 public class CalculoNumerico {
 
-	public static int getIntegerFromChar(char i)
+	private static int getIntegerFromChar(char i)
 	{
 		switch (i) {
 		case '1':
@@ -38,14 +39,14 @@ public class CalculoNumerico {
 		}		
 	}
 	
-	public static String decimalToBinary(float decimal)
+	public static String decimalToBinary(double decimal)
 	{
 		String leftSide = divisao_sucessiva((int)decimal);
 		String rightSide = multiplicacao_sucessiva(decimal - (int)decimal);
 		return leftSide + "," + rightSide;
 	}
 	
-	public static double[][] multiplicarMatrizes(double[][] multiplicadora,double[][] multiplicando)
+	private static double[][] multiplicarMatrizes(double[][] multiplicadora,double[][] multiplicando)
 	{
 		if(multiplicadora[0].length != multiplicando.length)
 		{
@@ -89,29 +90,7 @@ public class CalculoNumerico {
 			}
 	}
 	
-	public static HashMap<double[][], double[][]> obterMatrizLInversaE_UdaFatoracaoLU(double[][] matriz,double[][] b)
-	{
-		double[][] U = matriz;
-		double[][] temp = new double[0][0];
-		for(int i = 0 ; i < matriz.length - 1 ; i++)
-		{
-			temp = transformadaDeGauss(matriz, i);
-			b = multiplicarMatrizes(temp, b);
-			matriz = multiplicarMatrizes(temp, matriz);
-			temp = matriz;
-		}
-		System.out.println("Imprimindo matriz U:");
-		printMatriz(temp);
-		System.out.println("Imprimindo matriz L inversa");
-		printMatriz(b);
-		
-		HashMap<double[][], double[][]> hmap = new HashMap<double[][], double[][]>();
-		hmap.put(temp, b);
-		return hmap;
-	}
-	
-	
-	public static double[][] setIdentidadeToMatriz(double[][] matriz)
+    private static double[][] setIdentidadeToMatriz(double[][] matriz)
 	{
 		for(int index = 0 ; index < matriz.length ; index++)
 		{
@@ -130,20 +109,52 @@ public class CalculoNumerico {
 		return matriz;
 	}
 	
+    public static double[][] createMatriz(String elements, int numberOfLines)
+    {
+    	String[] itens = elements.split(",");
+    	if(itens.length % numberOfLines != 0)
+    	{
+    		System.out.println("A quantidade de elementos é incompatível com uma matriz");
+    		return null;
+    	}
+    	int numberOfCols = itens.length / numberOfLines;
+    	double[][] matriz = new double[numberOfLines][numberOfCols];
+    	int l=0,c=0;
+    	for(int i = 0 ; i < itens.length ; i++)
+    	{
+    		matriz[l][c] = Double.valueOf(itens[i].trim());
+    		if((c + 1) % numberOfCols == 0)
+    		{
+    			c = 0;
+    			++l;
+    		}
+    		else
+    		{
+    			++c;
+    		}    		
+    	}
+    	System.out.println("Imprinindo a matriz criada");
+    	printMatriz(matriz);
+    	return matriz;
+    }
+    
+    
 	/**
 	 * Algoritmo da folha do Professor.
 	 */
-	public static void fatoracaoLU(double[][] a,double[][] b,boolean comPivotamentoParcial)
+	public static double[][] fatoracaoLU(double[][] a,double[][] b,boolean comPivotamentoParcial)
 	{
 		double[][] u = a;
 		double[][] linv = new double[a.length][a[0].length];
-		setIdentidadeToMatriz(linv);
+		linv = setIdentidadeToMatriz(linv);
 		double[][] m = new double[a.length][a[0].length];
 		for(int i = 0 ; i < a.length -1 ; i++)
 		{
 			if(comPivotamentoParcial)
 			{
-				troca_linha(u);
+				ArrayList<double[][]> AeB = troca_linha(u,b);
+				u = AeB.get(0);
+				b = AeB.get(1);
 			}			
 			setIdentidadeToMatriz(m);
 			for(int j = i + 1 ; j < a.length ; j++)
@@ -166,15 +177,7 @@ public class CalculoNumerico {
 			}
 			x[i][0] = x[i][0] / u[i][i];
 		}
-		
-		System.out.println("Imprimindo linv:");
-		printMatriz(linv);
-		System.out.println("Imprimindo U");
-		printMatriz(u);
-		System.out.println("Imprimindo b");
-		printMatriz(b);
-		System.out.println("Imprimindo x");
-		printMatriz(x);
+		return x;
 		
 	}
 	
@@ -184,7 +187,7 @@ public class CalculoNumerico {
 	 * @param y
 	 * @param u
 	 */
-	public static void substituicao_regressiva(double[][] y,double[][] u)
+	public static double[][] substituicao_regressiva(double[][] y,double[][] u)
 	{
 		double[][] x = new double[y.length][y[0].length];
 		for(int i = x.length - 1; i >= 0 ; i--)
@@ -196,15 +199,14 @@ public class CalculoNumerico {
 			}
 			x[i][0] = x[i][0] / u[i][i];
 		}
-		System.out.println("Imprimindo x:");
-		printMatriz(x);
+		return x;
 	}
 	/**
 	 * Algoritmo do Professor.
 	 * @param l
 	 * @param b
 	 */
-	public static void substituicao_progressiva(double[][] l, double[][] b)
+	public static double[][] substituicao_progressiva(double[][] l, double[][] b)
 	{
 		double[][] y = new double[b.length][b[0].length];
 		for(int i = 0 ; i < y.length ; i++)
@@ -216,15 +218,18 @@ public class CalculoNumerico {
 			}
 			y[i][0] = y[i][0] / l[i][i];
 		}
+		return y;
 	}
 	
 	/**
-	 * Algoritmo feito por mim, mas que é do trabalho.
+	 * Algoritmo feito por mim, mas que é do trabalho. Precisa ser recorrigido
 	 * @param matriz
 	 * @return
 	 */
-	public static double[][] troca_linha(double[][] matriz)
+	public static ArrayList<double[][]> troca_linha(double[][] matriz,double[][] b)
 	{
+		System.out.println("Imprimindo  matriz antes de troca linha");
+		printMatriz(matriz);
 		for(int i = 0 ; i < matriz[0].length;i++)
 		{
 			for(int j = i + 1 ; j < matriz.length ; j++)
@@ -237,14 +242,24 @@ public class CalculoNumerico {
 						matriz[j][z] = matriz[i][z];
 						matriz[i][z] = temp;
 					}
+					for(int z = 0 ; z < b.length ; z++)
+					{
+						double temp = b[j][0];
+						b[j][0] = b[i][0];
+						b[i][0] = temp;
+					}
 				}
 			}
 		}
+		System.out.println("Imprimindo a matriz depois de troca linha");
 		printMatriz(matriz);
-		return matriz;
+		ArrayList<double[][]> AeB = new ArrayList<double[][]>();
+		AeB.add(matriz);
+		AeB.add(b);
+		return AeB;
 	}
 	/**
-	 * 
+	 * Algoritmo do Professor
 	 * @param a
 	 * @return
 	 */
@@ -276,86 +291,11 @@ public class CalculoNumerico {
 		return r;
 	}
 	
-	
-	
-	
 	/**
-	 * Algoritmo do Professor
-	 * @param a
+	 * Algoritmo do trabalho
+	 * @param decimal
 	 * @return
 	 */
-	public static double[][] algoritmoPivotacaoParcial(double [][] a)
-	{
-		int p = 0;
-		double[][] w = new double[a.length][1]; 
-		for(int k = 0; k < a.length-1 ; k++)
-		{
-			for(int j = k + 1 ; j < a.length ; j++)
-			{
-				if(a[j][k] > a[k][k])
-				{
-					p = j;
-				}
-			}
-			for(int j = k ; j < a.length ; j++)
-			{
-				double temp = a[k][j];
-				a[k][j] = a[p][j];
-				a[p][j] = temp;			
-			}
-			for(int j = k + 1; j < a.length ; j++)
-			{
-				w[j][0] = a[k][j];				
-			}
-			for(int i = k + 1 ; i < a.length ; i++)
-			{
-				double n = a[i][k] / a[k][k];
-				a[i][k] = n;
-				for(int j = k + 1 ; j < a.length ; j++)
-				{
-					a[i][j] = a[i][j] - n * w[j][0];					
-				}				
-			}
-		}
-		printMatriz(a);
-		return a;
-	}
-	
-	
-	
-	
-	
-	public static double[][] transformadaDeGauss(double[][] matriz, int level)
-	{
-		if(level > matriz.length)
-		{
-			System.out.println("O Level está fora do range da matriz.");
-			return null;
-		}
-		
-		double[][] resultado = new double[matriz.length][matriz[0].length];
-		for(int i = 0 ; i < matriz.length ; i++)
-		{
-			for(int j = 0 ; j < matriz[0].length ; j++)
-			{
-				if(i == j)
-				{
-					resultado[i][j] = 1;
-				}
-				else
-				{
-					resultado[i][j] = 0;
-				}
-			}
-		}
-		for(int i = level + 1 ; i < matriz.length ; i++)
-		{
-			resultado[i][level] = - matriz[i][level] / matriz[level][level];
-		}
-		return resultado;		
-	}
-	
-	
 	public static String divisao_sucessiva(int decimal)
 	{
 		String binaryRepresentation = "";
@@ -368,6 +308,11 @@ public class CalculoNumerico {
 		return binaryRepresentation;
 	}
 	
+	/**
+	 * Algoritmo do Trabalho
+	 * @param fracao
+	 * @return
+	 */
 	public static String multiplicacao_sucessiva(double fracao)
 	{
 		String binaryRepresentation = "";
@@ -386,16 +331,16 @@ public class CalculoNumerico {
 	}
 	
 	
-	public static int conversaoInteiroBinarioToDecimal(String binaryValue)
-	{
-		int value = 0;
-		for(int i = 0,b = binaryValue.length()-1; i < binaryValue.length() ; i++,b--)
-		{
-			value = (int) (value + getIntegerFromChar(binaryValue.charAt(i)) * Math.pow(2, b));
-		}
-		return value;
-		
-	}
+//	public static int conversaoInteiroBinarioToDecimal(String binaryValue)
+//	{
+//		int value = 0;
+//		for(int i = 0,b = binaryValue.length()-1; i < binaryValue.length() ; i++,b--)
+//		{
+//			value = (int) (value + getIntegerFromChar(binaryValue.charAt(i)) * Math.pow(2, b));
+//		}
+//		return value;
+//		
+//	}
 	
 	public static int briot_Ruffine_Inteiro(String binaryValue)
 	{
@@ -408,6 +353,11 @@ public class CalculoNumerico {
 		return valor;
 	}
 	
+	/**
+	 * Algoritmo do Trabalho
+	 * @param binaryValue
+	 * @return
+	 */
 	public static float briot_Ruffine_Fracao(String binaryValue)
 	{
 		float valor = getIntegerFromChar(binaryValue.charAt(binaryValue.length()-1));
@@ -419,32 +369,11 @@ public class CalculoNumerico {
 		return valor;
 	}
 	
-	public static float[] multiplicarMatrizes(
-											  float[] multiplicadora, 
-											  int nLinhasMultiplicadora, 
-											  float[] multiplicado,
-						  					  int nLinhasMultiplicado)
-	{
-		if(multiplicadora.length % nLinhasMultiplicadora != 0 || multiplicado.length % nLinhasMultiplicado != 0 )
-		{
-			System.out.println("O Tamnho de linhas não condiz com o tamanho da matriz");
-		}
-		
-		int nColunasMultiplicadora = multiplicadora.length/nLinhasMultiplicadora;
-		int nColunasMultiplicado = multiplicado.length/nLinhasMultiplicado;
-		for(int i = 0 ; i < nLinhasMultiplicadora ; i++)
-		{
-			for(int j = 0 ; j < nColunasMultiplicadora ; i++ )
-			{
-				for(int k = 0 ; k < nLinhasMultiplicadora ; i++)
-				{
-					
-				}
-			}
-		}		
-		return null;		
-	}
-	
+	/**
+	 * Algoritmo para o Trabalho
+	 * @param binaryValue
+	 * @return
+	 */
 	public static float binaryToDecimal(String binaryValue)
 	{
 		String[] valores = binaryValue.split(",");

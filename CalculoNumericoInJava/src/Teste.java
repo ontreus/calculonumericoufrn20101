@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -8,136 +9,158 @@ public class Teste {
 	
 	public static void main(String[] args)
 	{
-//		int a =CalculoNumerico.conversaoInteiroBinarioToDecimal("1111");
-//		int a = CalculoNumerico.briot_Ruffine_Inteiro("1110");
-//		float a = CalculoNumerico.briot_Ruffine_Fracao("01");
-//		float a = CalculoNumerico.binaryToDecimal("1101,01");
-//		String a = CalculoNumerico.divisao_sucessiva(13);
-//		String a = CalculoNumerico.multiplicacao_sucessiva(0.625);
-//		System.out.println(a);
 		int choose = 0;
 		while(choose != 7)
 		{
 			System.out.println("Por favor, escolha uma das funções abaixo de acordo com o número:");
-			System.out.println("1: Binário para Decimal");			
-			System.out.println("2: Briot-Ruffine Fração");
-			System.out.println("3: Briot-Ruffine Inteiro");
-			System.out.println("4: Divisão Sucessiva");
-			System.out.println("5: Multiplicação Sucessiva");
-			System.out.println("6: Binário Inteiro para Decimal(Força Bruta");
-			System.out.println("7: Sair do Programa");
-			System.out.println("8: Multiplicar duas matrizes");
-			System.out.println("9: Decimal para Binário");
-//			System.out.println("10: Decimal Fracao para Binário");
-//			System.out.println("11: Decimal para Binário");
+			System.out.println("1: Binário para Decimal");
+			System.out.println("2: Decimal para Binário");
+			System.out.println("3: Fatoração LU SEM Pivotamento Parcial");
+			System.out.println("4: Fatoração LU COM Pivotamento Parcial");
+			System.out.println("5: Algoritmo Troca-Linha");
+			System.out.println("6: Fatoração de Cholesky");
+			System.out.println("7: Substituição Progressiva");
+			System.out.println("8: Substituição Regressiva");
+					
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			try
 			{
 				choose = Integer.parseInt(reader.readLine());
-//				if(choose == 9)
-//				{
-//					System.out.println("Digite o número decimal inteiro");
-//					System.out.println("Resultado: " + CalculoNumerico.divisao_sucessiva(Integer.getInteger(reader.readLine().trim())));
-//					reader.readLine();
-//				}
-//				if(choose == 10)
-//				{
-//					System.out.println("Digite a parte fracionaria do decimal");
-//					Double d = Double.valueOf((reader.readLine().trim()));
-//					System.out.println("Resultado: " + CalculoNumerico.multiplicacao_sucessiva(d));
-//					reader.readLine();
-//				}
-				if(choose == 9)
-				{
-					System.out.println("Digite o número decimal");
-					double d = Double.valueOf((reader.readLine().trim()));
-					int a = (int)d;
-					double c = d - a;
-					String result = CalculoNumerico.divisao_sucessiva(a);
-					result = result + CalculoNumerico.multiplicacao_sucessiva(c);
-					System.out.println("Resultado: " + result);
-					reader.readLine();
-				}
-//				if(choose == 11)
-//				{
-//					System.out.println("Digite o numero decimal");
-//					String[] e = reader.readLine().trim().split(",");
-//					String a = CalculoNumerico.divisao_sucessiva(Integer.valueOf(e[0]));
-//					a = a + CalculoNumerico.multiplicacao_sucessiva(Integer.valueOf(e[1])) + 1;
-//					System.out.println("Resultado: " + a);
-//					reader.readLine();
-//				}
-				
-				
-				
 				if(choose == 1)
 				{
-					System.out.println("Digite a representação em binária do número, pode ser fração também");
-					System.out.println("Resultado: " + CalculoNumerico.binaryToDecimal(reader.readLine().trim()));
+					System.out.println("Digite a representação em String do Número Binário");
+					String bNumber = reader.readLine().trim();
+					double number = CalculoNumerico.binaryToDecimal(bNumber);
+					System.out.println("O número decimal para o binário dado é: " + number);
+					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
-				else if(choose == 2)
+				if(choose == 2)
 				{
-					System.out.println("Digite a a representação em binária da fração, sendo esta menor que 1");
-					System.out.println("Resultado: " + CalculoNumerico.briot_Ruffine_Fracao(reader.readLine().trim()));
+					System.out.println("Digite o número na base decimal");
+					double decimal = Double.valueOf(reader.readLine().trim());
+					String bNumber = CalculoNumerico.decimalToBinary(decimal);
+					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
-				else if(choose == 3)
+				if(choose == 3)
 				{
-					System.out.println("Digite a a representação em binária do Inteiro, sendo esta menor que 1");
-					System.out.println("Resultado: " + CalculoNumerico.briot_Ruffine_Inteiro(reader.readLine().trim()));
+					System.out.println("Digite os elementos da matriz A a ser calculada");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz A");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] A = CalculoNumerico.createMatriz(elements, lines);
+					System.out.println("Digite os elementos da matriz b a ser calculado");
+					elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz b");
+					lines = Integer.valueOf(reader.readLine().trim());
+					double[][] b = CalculoNumerico.createMatriz(elements, lines);
+					double[][] res = CalculoNumerico.fatoracaoLU(A, b, false);
+					System.out.println("Imprimindo o resultado da Fatoração LU SEM pivotamento parcial:");
+					CalculoNumerico.printMatriz(res);
+					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
-				else if(choose == 7)
+				if(choose == 4)
 				{
-					System.out.println("Saindo do programa...");
-					return;
-				}			
+					System.out.println("Digite os elementos da matriz A a ser calculada");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz A");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] A = CalculoNumerico.createMatriz(elements, lines);
+					System.out.println("Digite os elementos da matriz b a ser calculado");
+					elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz b");
+					lines = Integer.valueOf(reader.readLine().trim());
+					double[][] b = CalculoNumerico.createMatriz(elements, lines);
+					double[][] res = CalculoNumerico.fatoracaoLU(A, b, false);
+					System.out.println("Imprimindo o resultado da Fatoração LU COM pivotamento parcial:");
+					CalculoNumerico.printMatriz(res);		
+					System.out.println("Digite Enter para continuar...");
+					reader.readLine();
+					
+				}
+				if(choose == 5)
+				{
+					System.out.println("Digite a matriz A a ter as linhas trocadas");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz A");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] A = CalculoNumerico.createMatriz(elements, lines);
+					System.out.println("Digite a matriz b a ter as linhas trocadas");
+					elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz b");
+					lines = Integer.valueOf(reader.readLine().trim());
+					double[][] b = CalculoNumerico.createMatriz(elements, lines);
+					ArrayList<double[][]> res = CalculoNumerico.troca_linha(A,b);
+					System.out.println("Imprimindo a matriz  A do resultado do troca-linha");
+					CalculoNumerico.printMatriz(res.get(0));
+					System.out.println("Imprimindo a matriz b do resultado do troca-linha");
+					CalculoNumerico.printMatriz(res.get(1));
+					System.out.println("Digite Enter para continuar...");
+					reader.readLine();
+				}
+				if(choose == 6)
+				{
+					System.out.println("Digite os elementos da matriz A a ser calculada");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz A");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] A = CalculoNumerico.createMatriz(elements, lines);
+					double[][] res = CalculoNumerico.cholesky(A);
+					System.out.println("Imprimindo a matriz resultado da fatoração de Cholesky (R e R transposta) como no algoritmo do Professor:");
+					CalculoNumerico.printMatriz(res);
+					System.out.println("Digite Enter para continuar...");
+					reader.readLine();
+				}
+				if(choose == 7)
+				{
+					System.out.println("Digite os elementos da matriz L inversa");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz L");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] L = CalculoNumerico.createMatriz(elements, lines);
+					System.out.println("Digite os elementos da matriz b");
+					elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz A");
+					lines = Integer.valueOf(reader.readLine().trim());
+					double[][] b = CalculoNumerico.createMatriz(elements, lines);
+					double[][] res = CalculoNumerico.substituicao_progressiva(L,b);
+					System.out.println("Imprimindo a matriz y, resultado da Substituição progressiva");
+					CalculoNumerico.printMatriz(res);
+					System.out.println("Digite Enter para continuar...");
+					reader.readLine();
+				}
+				if(choose == 8)
+				{
+					System.out.println("Digite os elementos da matriz y");
+					String elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz y");
+					int lines = Integer.valueOf(reader.readLine().trim());
+					double[][] y = CalculoNumerico.createMatriz(elements, lines);
+					System.out.println("Digite os elementos da matriz u");
+					elements = reader.readLine();
+					System.out.println("Digite a quantidade de linhas que tem a matriz u");
+					lines = Integer.valueOf(reader.readLine().trim());
+					double[][] u = CalculoNumerico.createMatriz(elements, lines);
+					double[][] res = CalculoNumerico.substituicao_regressiva(y, u);
+					System.out.println("Imprimindo a matriz y, resultado da Substituição progressiva");
+					CalculoNumerico.printMatriz(res);
+					System.out.println("Digite Enter para continuar...");
+					reader.readLine();
+				}
 			}
-			catch(NumberFormatException e)
-			{
-				System.out.println("O que você digitou não é um número");
-			}
-			
-			
-			
 			catch(Exception e)
 			{
 				e.printStackTrace();
 				System.out.println("Voce nao digitou um número");
 				System.out.println("Saindo do Programa");
 				return;
-			}		
-
+			}	
 		}
-//		double[][] m1 = {{1,2},{3,4},{5,6}};
-//		double[][] m2 = {{1,2,3},{4,5,6}};
-//		
-//		double[][] m3 = CalculoNumerico.multiplicarMatrizes(m1, m2);		
-//		for(int i = 0 ; i < m3.length ; i++)
-//		{
-//			for(int k = 0 ; k < m3[0].length ; k++)
-//			{
-//				System.out.print(m3[i][k]+ ",");
-//			}
-//			System.out.println();
-//				
-//		}
-//		double[][] m1 = {{1,4,7},{2,5,8},{3,6,11}};
-//		double[][] m1 = {{1,4,7},{0,-3,-6},{0,-6,-10}};
-//		double [][] m2 = CalculoNumerico.transformadaDeGauss(m1, 1);
-//		CalculoNumerico.printMatriz(m2);
-		//double[][] m2 = {{12},{15},{20}};
-		//CalculoNumerico.obterMatrizLInversaE_UdaFatoracaoLU(m1, m2);
-		//CalculoNumerico.fatoracaoLU(m1, m2);
-		//double[][] m3 = {{0.0030,30.0000},{1.0000,4.0000}};
-		//CalculoNumerico.troca_linha(m3);
-		//CalculoNumerico.algoritmoPivotacaoParcial(m1);
-		//System.out.println(Math.sqrt(81));
-		//CalculoNumerico.troca_linha(m1);
-		//double[][] m5 = {{10,20,30},{20,45,80},{30,80,171}};
-		//CalculoNumerico.cholesky(m5);
 	}
+				
+
 
 }
