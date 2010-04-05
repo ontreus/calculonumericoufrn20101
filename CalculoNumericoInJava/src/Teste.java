@@ -41,6 +41,7 @@ public class Teste {
 					System.out.println("Digite o número na base decimal");
 					double decimal = Double.valueOf(reader.readLine().trim());
 					String bNumber = CalculoNumerico.decimalToBinary(decimal);
+					System.out.println("A representação no Sistema Binário é: "+bNumber);
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}

@@ -43,7 +43,7 @@ public class CalculoNumerico {
 	{
 		String leftSide = divisao_sucessiva((int)decimal);
 		String rightSide = multiplicacao_sucessiva(decimal - (int)decimal);
-		return leftSide + "," + rightSide;
+		return leftSide +","+ rightSide;
 	}
 	
 	private static double[][] multiplicarMatrizes(double[][] multiplicadora,double[][] multiplicando)
@@ -316,9 +316,9 @@ public class CalculoNumerico {
 	public static String multiplicacao_sucessiva(double fracao)
 	{
 		String binaryRepresentation = "";
-		if(fracao < 1)
+		if(fracao == 0)
 		{
-			binaryRepresentation = ",";
+			return "0";
 		}
 		while(fracao != 0 && binaryRepresentation.length() < 2000)
 		{
