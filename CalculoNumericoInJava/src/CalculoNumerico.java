@@ -46,7 +46,7 @@ public class CalculoNumerico {
 		return leftSide +","+ rightSide;
 	}
 	
-	private static double[][] multiplicarMatrizes(double[][] multiplicadora,double[][] multiplicando)
+	public static double[][] multiplicarMatrizes(double[][] multiplicadora,double[][] multiplicando)
 	{
 		if(multiplicadora[0].length != multiplicando.length)
 		{
@@ -62,7 +62,6 @@ public class CalculoNumerico {
 				resultado[i][j] = 0;
 			}
 		}		
-		
 		for(int i = 0 ; i < multiplicadora.length ; i++)
 		{
 			for(int j = 0 ; j < multiplicando[0].length ; j++)
@@ -76,6 +75,30 @@ public class CalculoNumerico {
 		return resultado;
 		
 	}
+	
+//	public static double[][] encontrarAInversa(double[][] l,double[][] u)
+//	{
+//		double[][] id1 = {{1},{0},{0}};
+//		double[][] y1 = substituicao_progressiva(l, id1);
+//		double[][] x1 = substituicao_regressiva(y1, u);
+//		double[][] id2 = {{0},{1},{0}};
+//		double[][] y2 = multiplicarMatrizes(l, id2);
+//		double[][] x2 = substituicao_regressiva(y2, u);
+//		double[][] id3 = {{0},{0},{1}};
+//		double[][] y3 = multiplicarMatrizes(l, id3);
+//		double[][] x3 = substituicao_regressiva(y3, u);
+//		double[][] result = new double[l.length][l.length];
+//		result[0][0] = x1[0][0];
+//		result[1][0] = x1[1][0];
+//		result[2][0] = x1[2][0];
+//		result[0][1] = x2[0][0];
+//		result[1][1] = x2[1][0];
+//		result[2][1] = x2[2][0];
+//		result[0][2] = x3[0][0];
+//		result[1][2] = x3[1][0];
+//		result[2][2] = x3[2][0];
+//		return result;
+//	}
 	
 	public static void printMatriz(double[][] matriz)
 	{
