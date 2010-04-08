@@ -76,29 +76,64 @@ public class CalculoNumerico {
 		
 	}
 	
-//	public static double[][] encontrarAInversa(double[][] l,double[][] u)
-//	{
-//		double[][] id1 = {{1},{0},{0}};
-//		double[][] y1 = substituicao_progressiva(l, id1);
-//		double[][] x1 = substituicao_regressiva(y1, u);
-//		double[][] id2 = {{0},{1},{0}};
-//		double[][] y2 = multiplicarMatrizes(l, id2);
-//		double[][] x2 = substituicao_regressiva(y2, u);
-//		double[][] id3 = {{0},{0},{1}};
-//		double[][] y3 = multiplicarMatrizes(l, id3);
-//		double[][] x3 = substituicao_regressiva(y3, u);
-//		double[][] result = new double[l.length][l.length];
-//		result[0][0] = x1[0][0];
-//		result[1][0] = x1[1][0];
-//		result[2][0] = x1[2][0];
-//		result[0][1] = x2[0][0];
-//		result[1][1] = x2[1][0];
-//		result[2][1] = x2[2][0];
-//		result[0][2] = x3[0][0];
-//		result[1][2] = x3[1][0];
-//		result[2][2] = x3[2][0];
-//		return result;
-//	}
+		public static boolean ehSimetrica(double[][] matriz)
+		{
+			if(matriz.length != matriz[0].length)
+			{
+				return false;
+			}
+			for(int i = 0,j = matriz.length -1 ; i < matriz.length ; i++,j--)
+			{
+				if(matriz[i][j] != matriz[j][i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	
+	public static boolean ehPositivaDefinida(double[][] a)
+	{
+		double[][] u = a;
+		double[][] m = new double[a.length][a[0].length];
+		for(int i = 0 ; i < a.length -1 ; i++)
+		{
+			setIdentidadeToMatriz(m);
+			for(int j = i + 1 ; j < a.length ; j++)
+			{
+				m[j][i] = -u[j][i] / u[i][i];
+			}
+			u = multiplicarMatrizes(m, u);		
+		}
+		//printMatriz(u);
+		
+		for(int i = 0 ; i < u.length ; i++)
+		{
+			if(u[i][i] < 0)
+			{
+				return false;
+			}
+				
+		}
+		return true;	
+	}
+	
+	/**
+	 * 
+	 * @param binaryValue
+	 * @return
+	 */
+	public static int binaryToDecimalForcaBruta(String binaryValue)
+	{
+		int valor = 0;
+		int cont = 0;
+		while(cont < binaryValue.length())
+		{
+			valor = valor + getIntegerFromChar(binaryValue.charAt(cont)) * (int)Math.pow(2, binaryValue.length() - cont - 1);
+			cont = cont + 1;
+		}
+		return valor;
+	}
 	
 	public static void printMatriz(double[][] matriz)
 	{
@@ -165,7 +200,7 @@ public class CalculoNumerico {
 	/**
 	 * Algoritmo da folha do Professor.
 	 */
-	public static double[][] fatoracaoLU(double[][] a,double[][] b,boolean comPivotamentoParcial)
+	public static double[][] fatoracaoLU(double[][] a,double[][] b)//,boolean comPivotamentoParcial)
 	{
 		double[][] u = a;
 		double[][] linv = new double[a.length][a[0].length];
@@ -173,12 +208,13 @@ public class CalculoNumerico {
 		double[][] m = new double[a.length][a[0].length];
 		for(int i = 0 ; i < a.length -1 ; i++)
 		{
-			if(comPivotamentoParcial)
-			{
-				ArrayList<double[][]> AeB = troca_linha(u,b);
-				u = AeB.get(0);
-				b = AeB.get(1);
-			}			
+//			if(comPivotamentoParcial)
+//			{
+//				ArrayList<double[][]> AeB = troca_linha(u,b,a);
+//				u = AeB.get(0);
+//				b = AeB.get(1);
+//				a = AeB.get(2);
+//			}			
 			setIdentidadeToMatriz(m);
 			for(int j = i + 1 ; j < a.length ; j++)
 			{
@@ -200,6 +236,13 @@ public class CalculoNumerico {
 			}
 			x[i][0] = x[i][0] / u[i][i];
 		}
+		//if(comPivotamentoParcial)
+		//{
+//			System.out.println("Reimprinindo a matriz A, com as linhas permutadas");
+//			printMatriz(a);
+//			System.out.println("Reimprinindo a matriz b, com as linhas permutadas");
+//			printMatriz(b);			
+		//}		
 		return x;
 		
 	}
@@ -249,10 +292,12 @@ public class CalculoNumerico {
 	 * @param matriz
 	 * @return
 	 */
-	public static ArrayList<double[][]> troca_linha(double[][] matriz,double[][] b)
+	public static double[][] troca_linha(double[][] matriz)
 	{
 		System.out.println("Imprimindo  matriz antes de troca linha");
-		printMatriz(matriz);
+		//printMatriz(matriz);
+		System.out.println("Imprimindo b antes de troca linha");
+		//printMatriz(b);
 		for(int i = 0 ; i < matriz[0].length;i++)
 		{
 			for(int j = i + 1 ; j < matriz.length ; j++)
@@ -265,21 +310,22 @@ public class CalculoNumerico {
 						matriz[j][z] = matriz[i][z];
 						matriz[i][z] = temp;
 					}
-					for(int z = 0 ; z < b.length ; z++)
-					{
-						double temp = b[j][0];
-						b[j][0] = b[i][0];
-						b[i][0] = temp;
-					}
+//					for(int z = 0 ; z < b.length ; z++)
+//					{
+//						double temp = b[j][0];
+//						b[j][0] = b[i][0];
+//						b[i][0] = temp;
+//					}
 				}
 			}
 		}
 		System.out.println("Imprimindo a matriz depois de troca linha");
 		printMatriz(matriz);
-		ArrayList<double[][]> AeB = new ArrayList<double[][]>();
-		AeB.add(matriz);
-		AeB.add(b);
-		return AeB;
+//		ArrayList<double[][]> AeB = new ArrayList<double[][]>();
+//		AeB.add(matriz);
+//		AeB.add(b);
+//		AeB.add(a);
+		return matriz;
 	}
 	/**
 	 * Algoritmo do Professor
@@ -288,6 +334,14 @@ public class CalculoNumerico {
 	 */
 	public static double[][] cholesky(double[][] a)
 	{
+		if(!ehSimetrica(a))
+		{
+			return null;
+		}
+		if(!ehPositivaDefinida(a))
+		{
+			return null;
+		}		
 		double[][] r = a;
 		for(int k=0 ; k < a.length ; k++)
 		{
@@ -297,8 +351,8 @@ public class CalculoNumerico {
 				primeiroSomatorio += Math.pow(r[k][p], 2);
 			}
 			r[k][k] = Math.sqrt( r[k][k] - primeiroSomatorio );
-			printMatriz(r);
-			System.out.println();
+			//printMatriz(r);
+			//System.out.println();
 			for(int i = k + 1 ; i < a.length ; i++)
 			{
 				double segundoSomatorio = 0;
@@ -310,7 +364,7 @@ public class CalculoNumerico {
 				r[k][i] = r[i][k];
 			}			
 		}
-		printMatriz(r);
+		//printMatriz(r);
 		return r;
 	}
 	
