@@ -7,13 +7,19 @@ import java.util.Scanner;
 
 public class Teste {
 	
+	public static int legal()
+	{
+		return 1;
+	}
+	
 	public static void main(String[] args)
 //	{
-//		double[][] a = {{1,4,7},{2,5,8},{3,6,11}};
-//		double[][] b = {{12},{15},{20}};
+//		double[][] a = {{1,4},{0.003,30}};
+//		double[][] b = {{1},{5.001}};
 //		double[][] semP = CalculoNumerico.fatoracaoLU(a, b, false);
 //		double[][] comP = CalculoNumerico.fatoracaoLU(a, b, true);
 //	}
+	
 	{
 		int choose = 0;
 		while(choose != -1)
@@ -26,15 +32,14 @@ public class Teste {
 			System.out.println("5: Decimal Inteiro para Binario");
 			System.out.println("6: Decimal Fração para Binario");
 			System.out.println("7: Fatoração LU");
-			//System.out.println("8: Fatoração LU COM Pivotamento Parcial");
 			System.out.println("9: Algoritmo Troca-Linha");
 			System.out.println("10: Fatoração de Cholesky");
-//			System.out.println("11: Substituição Progressiva");
-//			System.out.println("12: Substituição Regressiva");
 			System.out.println("11: Multiplicar duas matrizes");
 			System.out.println("12: Sair do Programa");
 			System.out.println("13: Binario Inteiro para Decimal (Forca Bruta)");
 			
+			
+			int[] a = {Teste.legal()};
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			try
@@ -79,25 +84,6 @@ public class Teste {
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
-//				if(choose == 8)
-//				{
-//					System.out.println("Digite os elementos da matriz A a ser calculada");
-//					String elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz A");
-//					int lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] A = CalculoNumerico.createMatriz(elements, lines);
-//					System.out.println("Digite os elementos da matriz b a ser calculado");
-//					elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz b");
-//					lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] b = CalculoNumerico.createMatriz(elements, lines);
-//					double[][] res = CalculoNumerico.fatoracaoLU(A, b);//, true);
-//					System.out.println("Imprimindo o resultado da Fatoração LU COM pivotamento parcial:");
-//					CalculoNumerico.printMatriz(res);		
-//					System.out.println("Digite Enter para continuar...");
-//					reader.readLine();
-//					
-//				}
 				if(choose == 9)
 				{
 					System.out.println("Digite a matriz A a ter as linhas trocadas");
@@ -105,16 +91,10 @@ public class Teste {
 					System.out.println("Digite a quantidade de linhas que tem a matriz A");
 					int lines = Integer.valueOf(reader.readLine().trim());
 					double[][] A = CalculoNumerico.createMatriz(elements, lines);
-//					System.out.println("Digite a matriz b a ter as linhas trocadas");
-//					elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz b");
-//					lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] b = CalculoNumerico.createMatriz(elements, lines);
 					double[][] res = CalculoNumerico.troca_linha(A);
 					System.out.println("Imprimindo a matriz  A do resultado do troca-linha");
 					CalculoNumerico.printMatriz(res);
-//					System.out.println("Imprimindo a matriz b do resultado do troca-linha");
-//					CalculoNumerico.printMatriz(res.get(1));
+
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
@@ -139,42 +119,6 @@ public class Teste {
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();										
 				}
-//				if(choose == 11)
-//				{
-//					System.out.println("Digite os elementos da matriz L inversa");
-//					String elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz L");
-//					int lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] L = CalculoNumerico.createMatriz(elements, lines);
-//					System.out.println("Digite os elementos da matriz b");
-//					elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz A");
-//					lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] b = CalculoNumerico.createMatriz(elements, lines);
-//					double[][] res = CalculoNumerico.substituicao_progressiva(L,b);
-//					System.out.println("Imprimindo a matriz y, resultado da Substituição progressiva");
-//					CalculoNumerico.printMatriz(res);
-//					System.out.println("Digite Enter para continuar...");
-//					reader.readLine();
-//				}
-//				if(choose == 12)
-//				{
-//					System.out.println("Digite os elementos da matriz y");
-//					String elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz y");
-//					int lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] y = CalculoNumerico.createMatriz(elements, lines);
-//					System.out.println("Digite os elementos da matriz u");
-//					elements = reader.readLine();
-//					System.out.println("Digite a quantidade de linhas que tem a matriz u");
-//					lines = Integer.valueOf(reader.readLine().trim());
-//					double[][] u = CalculoNumerico.createMatriz(elements, lines);
-//					double[][] res = CalculoNumerico.substituicao_regressiva(y, u);
-//					System.out.println("Imprimindo a matriz X, resultado da Substituição regressiva");
-//					CalculoNumerico.printMatriz(res);
-//					System.out.println("Digite Enter para continuar...");
-//					reader.readLine();
-//				}
 				if(choose == 11)
 				{
 					System.out.println("Digite os elementos da primeira matriz");

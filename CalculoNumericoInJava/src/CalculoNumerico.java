@@ -148,7 +148,7 @@ public class CalculoNumerico {
 			}
 	}
 	
-    private static double[][] setIdentidadeToMatriz(double[][] matriz)
+    public static double[][] setIdentidadeToMatriz(double[][] matriz)
 	{
 		for(int index = 0 ; index < matriz.length ; index++)
 		{
@@ -200,8 +200,21 @@ public class CalculoNumerico {
 	/**
 	 * Algoritmo da folha do Professor.
 	 */
-	public static double[][] fatoracaoLU(double[][] a,double[][] b)//,boolean comPivotamentoParcial)
+	public static double[][] fatoracaoLU(double[][] a,double[][] b)//, boolean comPivotamentoParcial)
 	{
+//		if(comPivotamentoParcial)
+//		{
+//			ArrayList<double[][]> AeB = troca_linha(a,b);
+//			a = AeB.get(0);
+//			b = AeB.get(1);			
+//		}
+//		if(comPivotamentoParcial)
+//		{
+//			System.out.println("Reimprinindo a matriz A, com as linhas permutadas");
+//			printMatriz(a);
+//			System.out.println("Reimprinindo a matriz b, com as linhas permutadas");
+//			printMatriz(b);			
+//		}
 		double[][] u = a;
 		double[][] linv = new double[a.length][a[0].length];
 		linv = setIdentidadeToMatriz(linv);
@@ -210,11 +223,9 @@ public class CalculoNumerico {
 		{
 //			if(comPivotamentoParcial)
 //			{
-//				ArrayList<double[][]> AeB = troca_linha(u,b,a);
+//				ArrayList<double[][]> AeB = troca_linha(u);
 //				u = AeB.get(0);
-//				b = AeB.get(1);
-//				a = AeB.get(2);
-//			}			
+//			}						
 			setIdentidadeToMatriz(m);
 			for(int j = i + 1 ; j < a.length ; j++)
 			{
@@ -236,15 +247,9 @@ public class CalculoNumerico {
 			}
 			x[i][0] = x[i][0] / u[i][i];
 		}
-		//if(comPivotamentoParcial)
-		//{
-//			System.out.println("Reimprinindo a matriz A, com as linhas permutadas");
-//			printMatriz(a);
-//			System.out.println("Reimprinindo a matriz b, com as linhas permutadas");
-//			printMatriz(b);			
-		//}		
-		return x;
-		
+		System.out.println("Imprinindo a matriz resultado");
+		printMatriz(x);
+		return x;		
 	}
 	
 	/**
@@ -287,17 +292,10 @@ public class CalculoNumerico {
 		return y;
 	}
 	
-	/**
-	 * Algoritmo feito por mim, mas que é do trabalho. Precisa ser recorrigido
-	 * @param matriz
-	 * @return
-	 */
-	public static double[][] troca_linha(double[][] matriz)
+	public static double[][] /*double[][]*/ troca_linha(double[][] matriz)
 	{
 		System.out.println("Imprimindo  matriz antes de troca linha");
-		//printMatriz(matriz);
-		System.out.println("Imprimindo b antes de troca linha");
-		//printMatriz(b);
+		printMatriz(matriz);
 		for(int i = 0 ; i < matriz[0].length;i++)
 		{
 			for(int j = i + 1 ; j < matriz.length ; j++)
@@ -310,22 +308,61 @@ public class CalculoNumerico {
 						matriz[j][z] = matriz[i][z];
 						matriz[i][z] = temp;
 					}
-//					for(int z = 0 ; z < b.length ; z++)
-//					{
-//						double temp = b[j][0];
-//						b[j][0] = b[i][0];
-//						b[i][0] = temp;
-//					}
 				}
 			}
 		}
 		System.out.println("Imprimindo a matriz depois de troca linha");
 		printMatriz(matriz);
+		System.out.println();
 //		ArrayList<double[][]> AeB = new ArrayList<double[][]>();
 //		AeB.add(matriz);
-//		AeB.add(b);
-//		AeB.add(a);
 		return matriz;
+	}
+	
+	
+	/**
+	 * Algoritmo feito por mim, mas que é do trabalho. Precisa ser recorrigido
+	 * @param matriz
+	 * @return
+	 */
+	public static ArrayList<double[][]> /*double[][]*/ troca_linha(double[][] matriz,double[][] b)
+	{
+		System.out.println("Imprimindo  matriz antes de troca linha");
+		printMatriz(matriz);
+		System.out.println("Imprimindo b antes de troca linha");
+		printMatriz(b);
+		for(int i = 0 ; i < matriz[0].length;i++)
+		{
+			for(int j = i + 1 ; j < matriz.length ; j++)
+			{
+				if(matriz[j][i] > matriz[i][i])
+				{
+					for(int z = 0 ; z < matriz.length ; z++)
+					{
+						double temp = matriz[j][z];
+						matriz[j][z] = matriz[i][z];
+						matriz[i][z] = temp;
+					}
+					for(int z = 0 ; z < b.length ; z++)
+					{
+						double temp = b[j][0];
+						b[j][0] = b[i][0];
+						b[i][0] = temp;
+					}
+				}
+			}
+		}
+		System.out.println("Imprimindo a matriz depois de troca linha");
+		printMatriz(matriz);
+		System.out.println("Imprimindo a matriz b depois de troca linha");
+		printMatriz(b);
+		System.out.println();
+		ArrayList<double[][]> AeB = new ArrayList<double[][]>();
+		AeB.add(matriz);
+		AeB.add(b);
+//		AeB.add(a);
+		//return matriz;
+		return AeB;
 	}
 	/**
 	 * Algoritmo do Professor
