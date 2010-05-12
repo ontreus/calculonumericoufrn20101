@@ -3,15 +3,46 @@ import Jama.util.Maths;
 
 public class SistemaNaoLinear2Unidade {
 	
-	public static boolean condicaoDeParada(double[][] matriz,double erro)
+	public int funcao;
+	public static int iteracoes = 100;
+	
+	public double[][] F1(double[][] x)
 	{
-		return false;
+		if(x.length > 2)
+		{
+			System.out.println("Tamanho maior que 2");
+			return null;
+		}
+		if(x[0].length > 1)
+		{
+			System.out.println("Quantidade de colunas maior que 2");
+			return null;
+		}
+		double[][] result = new double[2][1];
+		result[0][0] = Math.pow(x[0][0], 2) + Math.pow(x[1][0], 2) - 1;
+		result[1][0] = x[1][0] - Math.pow(x[0][0], 2);
+		return result;
 	}
 	
-		
+	public double[][] F2(double[][] x)
+	{
+		if(x.length > 2)
+		{
+			System.out.println("Tamanho maior que 2");
+			return null;
+		}
+		if(x[0].length > 1)
+		{
+			System.out.println("Quantidade de colunas maior que 2");
+			return null;
+		}
+		double[][] result = new double[2][1];
+		result[0][0] = Math.pow(x[0][0], 2) + Math.pow(x[1][0], 2) - 2;
+		result[1][0] = Math.pow(x[0][0], 2) - Math.pow(x[1][0], 2) - 1;
+		return result;
+	}
 	
-	
-	
+			
 	public static double[][] inversaDaMatriz(double[][] matriz)
 	{
 		Matrix m = new Matrix(matriz);
@@ -20,10 +51,43 @@ public class SistemaNaoLinear2Unidade {
 		return matriz;
 	}
 	
+	public static boolean isNumber(String string)
+	{
+		try
+		{
+			double re = Double.parseDouble(string);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}		
+	}
+	
 	public double[][] F(double[][] x)
 	{
-		return x;
+		if(funcao == CN2Unidade.FUNCAO_1)
+			return F1(x);
+		else if(funcao == CN2Unidade.FUNCAO_2)
+			return F2(x);
+		return null;			
 	}
+	
+	
+	public boolean condicaoDeParada(double[][] matriz, double erro)
+	{
+		matriz = F(matriz);
+		for(int i = 0 ; i < matriz.length ; i++)
+		{
+			for(int j = 0 ; j < matriz[0].length ; j++ )
+			{
+				if(Math.abs(matriz[i][j]) > erro)
+					return false;
+			}
+		}
+		return true;
+	}
+	
 	
 	public double[][] subtrairMatrizes(double[][] a,double[][] b)
 	{
@@ -102,15 +166,34 @@ public class SistemaNaoLinear2Unidade {
 		return result;
 	}
 	
+	public static boolean hasNan(double[][] matriz)
+	{
+		for(int i = 0 ; i < matriz.length ; i++)
+		{
+			for(int j = 0 ; j < matriz[0].length ; j++)
+			{
+				if(Double.isNaN(matriz[i][j]))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	public double[][] quaseNewton(double[][] x,double erro)
 	{
 		double[][] B = new double[x.length][x.length];
 		CalculoNumerico.setIdentidadeToMatriz(B);
-		double[][] xqn,y,s,strans,u,Binversa,sT;
+		double[][] xqn,y,s,u,Binversa,sT;
 		double[][] dividendo;
+		double[][] backup;
 		double divisor;
+		int i = 0;
 		do
 		{
+			backup = x;
 			Binversa = inversaDaMatriz(B);
 			xqn = subtrairMatrizes(x,CalculoNumerico.multiplicarMatrizes(Binversa,F(x)));
 			y = subtrairMatrizes(F(xqn),F(x));
@@ -126,8 +209,13 @@ public class SistemaNaoLinear2Unidade {
 			Binversa = subtrairMatrizes(Binversa, dividirMatrizPorNumero(dividendo, divisor));
 			B = somarMatrizes(B,CalculoNumerico.multiplicarMatrizes(u, sT));
 			x = xqn;
+			if(SistemaNaoLinear2Unidade.hasNan(x))
+			{
+				return backup;
+			}
+			i++;
 		}
-		while(condicaoDeParada(x, 0.000001));
+		while(!this.condicaoDeParada(x, erro) && i < iteracoes);
 		return x;
 	}
 	

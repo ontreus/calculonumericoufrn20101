@@ -7,11 +7,7 @@ import java.util.Scanner;
 
 public class Teste {
 	
-	public static int legal()
-	{
-		return 1;
-	}
-	
+
 	public static void main(String[] args)
 //	{
 //		double[][] a = {{1,4},{0.003,30}};
@@ -24,32 +20,29 @@ public class Teste {
 		int choose = 0;
 		while(choose != -1)
 		{
-			System.out.println("Por favor, escolha uma das funções abaixo de acordo com o numero:");
+			System.out.println("Por favor, escolha uma das funï¿½ï¿½es abaixo de acordo com o numero:");
 			System.out.println("1: Binario para Decimal(Briot-Ruffini)");
 			System.out.println("2: Binario Inteiro para Decimal (Briot-Ruffini)");
-			System.out.println("3: Binario Fração para Decimal (Briot-Ruffini)");
+			System.out.println("3: Binario Fraï¿½ï¿½o para Decimal (Briot-Ruffini)");
 			System.out.println("4: Decimal para Binario");
 			System.out.println("5: Decimal Inteiro para Binario");
-			System.out.println("6: Decimal Fração para Binario");
-			System.out.println("7: Fatoração LU");
+			System.out.println("6: Decimal Fraï¿½ï¿½o para Binario");
+			System.out.println("7: Fatoraï¿½ï¿½o LU");
 			System.out.println("9: Algoritmo Troca-Linha");
-			System.out.println("10: Fatoração de Cholesky");
+			System.out.println("10: Fatoraï¿½ï¿½o de Cholesky");
 			System.out.println("11: Multiplicar duas matrizes");
 			System.out.println("12: Sair do Programa");
 			System.out.println("13: Binario Inteiro para Decimal (Forca Bruta)");
-			
-			
-			int[] a = {Teste.legal()};
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			try
 			{
 				choose = Integer.parseInt(reader.readLine());
-				System.out.println("Voce selecionou a opção: " + choose);
+				System.out.println("Voce selecionou a opï¿½ï¿½o: " + choose);
 				if(choose == 1 || choose == 2 || choose == 3)
 				{
-					System.out.println("Digite a representação em String do Numero Binario");
-					System.out.println("Neste caso, a vírgula difere a parte inteira da binaria");
+					System.out.println("Digite a representaï¿½ï¿½o em String do Numero Binario");
+					System.out.println("Neste caso, a vï¿½rgula difere a parte inteira da binaria");
 					String bNumber = reader.readLine().trim();
 					double number = CalculoNumerico.binaryToDecimal(bNumber);
 					System.out.println("O numero decimal para o binario dado eh: " + number);
@@ -61,7 +54,7 @@ public class Teste {
 					System.out.println("Digite o numero na base decimal");
 					double decimal = Double.valueOf(reader.readLine().trim());
 					String bNumber = CalculoNumerico.decimalToBinary(decimal);
-					System.out.println("A representação no Sistema Binario eh: "+bNumber);
+					System.out.println("A representaï¿½ï¿½o no Sistema Binario eh: "+bNumber);
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
@@ -79,7 +72,7 @@ public class Teste {
 					double[][] b = CalculoNumerico.createMatriz(elements, lines);
 					//double[][] res = CalculoNumerico.fatoracaoLU(A, b,false);
 					double[][] res = CalculoNumerico.fatoracaoLU(A, b);
-					System.out.println("Imprimindo o resultado da Fatoração LU SEM pivotamento parcial:");
+					System.out.println("Imprimindo o resultado da Fatoraï¿½ï¿½o LU SEM pivotamento parcial:");
 					CalculoNumerico.printMatriz(res);
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
@@ -108,12 +101,12 @@ public class Teste {
 					double[][] res = CalculoNumerico.cholesky(A);
 					if(res == null)
 					{
-						System.out.println("A matriz não pode ser calculada pois não eh positiva definida ou simetrica");
+						System.out.println("A matriz nï¿½o pode ser calculada pois nï¿½o eh positiva definida ou simetrica");
 						
 					}
 					else
 					{
-						System.out.println("Imprimindo a matriz resultado da fatoração de Cholesky (R e R transposta) como no algoritmo do Professor:");
+						System.out.println("Imprimindo a matriz resultado da fatoraï¿½ï¿½o de Cholesky (R e R transposta) como no algoritmo do Professor:");
 						CalculoNumerico.printMatriz(res);
 					}
 					System.out.println("Digite Enter para continuar...");
@@ -132,7 +125,7 @@ public class Teste {
 					lines = Integer.valueOf(reader.readLine().trim());
 					double[][] u = CalculoNumerico.createMatriz(elements, lines);
 					double[][] res = CalculoNumerico.multiplicarMatrizes(y, u);
-					System.out.println("Imprimindo a multiplicação das matrizes");
+					System.out.println("Imprimindo a multiplicaï¿½ï¿½o das matrizes");
 					CalculoNumerico.printMatriz(res);
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
@@ -147,7 +140,7 @@ public class Teste {
 					System.out.println("Digite o numero binario inteiro");
 					String br = reader.readLine().trim();
 					int result = CalculoNumerico.binaryToDecimalForcaBruta(br);
-					System.out.println("O Resultado da conversão para a base decimal eh: " + result);
+					System.out.println("O Resultado da conversï¿½o para a base decimal eh: " + result);
 					System.out.println("Digite Enter para continuar...");
 					reader.readLine();
 				}
