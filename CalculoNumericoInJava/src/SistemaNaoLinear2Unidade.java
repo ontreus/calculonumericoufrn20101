@@ -216,6 +216,7 @@ public class SistemaNaoLinear2Unidade {
 			i++;
 		}
 		while(!this.condicaoDeParada(x, erro) && i < iteracoes);
+		System.out.println("Quantidade de Iterações feitas:" + i);
 		return x;
 	}
 	

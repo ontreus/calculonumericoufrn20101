@@ -67,22 +67,6 @@ public class CN2Unidade {
 		this.intervaloAproximacao = trocaDeSinal(pontoInicial, deslocamento);
 	}
 	
-	public Pair<Double,Double> executarLagrange()
-	{
-		
-		if(intervalosPositivos)
-		{
-			if(funcao == FUNCAO_1)
-			{
-				intervaloAproximacao.setY(lagrange(2, 0, -2, 1));
-				intervaloAproximacao.setX(lagrange(2, 2, 2, 2));
-			}
-		}		
-		return intervaloAproximacao;
-	}
-	
-
-	
 	public static void main(String[] args)
 	{
 		CN2Unidade cn = new CN2Unidade();		
@@ -106,14 +90,12 @@ public class CN2Unidade {
 					System.out.println("2: f(x) = x² + x - 6");
 					System.out.println("3: f(x) = senx² - x");					
 					System.out.println("4: Voltar ao Menu Principal");
-					choose = -1;
 					funcao:while (true)
 					{
 						choose = Integer.parseInt(reader.readLine());
 						if(choose == 1 || choose == 2 || choose == 3)
 						{
 							cn.funcao = choose;
-							choose = -1;
 							while(true)						
 							{
 								System.out.println("Escolha um dos metodos de Aproximcao");
@@ -124,7 +106,7 @@ public class CN2Unidade {
 								System.out.println("5: Sair do programa");
 																
 								choose = Integer.parseInt(reader.readLine());
-								if(choose == 1 || choose == 3)
+								if(choose == 1)
 								{
 									System.out.println("Insira o ponto inicial:");
 									cn.pontoInicial = Double.parseDouble(reader.readLine());
@@ -137,7 +119,7 @@ public class CN2Unidade {
 								}
 								else if(choose == 2)
 								{
-									if(cn.funcao == FUNCAO_2)
+									if(cn.funcao == FUNCAO_3)
 									{
 										System.out.println("Esta funcao nao pode ser usada com Lagrange.");
 										continue;
@@ -154,7 +136,7 @@ public class CN2Unidade {
 										{
 											cn.intervalosPositivos = false;
 										}
-										cn.executarLagrange();
+										cn.getLagrange();
 										System.out.println("Intervalo gerado por Lagrange:");
 										System.out.println("[ " + cn.intervaloAproximacao.getX().toString() + " , " + cn.intervaloAproximacao.getY().toString() + " ]" );
 										reader.readLine();
@@ -189,13 +171,23 @@ public class CN2Unidade {
 								while(true)
 								{
 									choose = Integer.parseInt(reader.readLine());
+									if(choose != 5 && choose != 6)
+									{
+										System.out.println("Agora insira o erro do resultado. Digite qualquer não número para usar o erro padrão.");
+										String f = reader.readLine();
+										if(SistemaNaoLinear2Unidade.isNumber(f))
+											CN2Unidade.erro = Double.parseDouble(f);
+										
+									}									
 									if(choose == 1)
 									{
+										
 										result = cn.executarBissecao();
 										s = s + "Bisseção"; 
 									}
 									else if(choose == 2)
 									{
+										
 										result = cn.executarCordas();
 										s = s + "Corda";
 									}
@@ -349,6 +341,40 @@ public class CN2Unidade {
 		return new Pair<Double,Double>(x,x+d);
 	}
 	
+	public void getLagrange()
+	{
+		Pair<Double, Double> p = new Pair<Double, Double>();
+		if(funcao == FUNCAO_1)
+		{
+			if(intervalosPositivos)
+			{
+				p.setX(lagrange(2, 0, 2, 1));
+				p.setY(1 / lagrange(2, 0, 2, 2));				
+			}
+			else
+			{
+				p.setX(- lagrange(2, 0, 2, 1));
+				p.setY(-1 / lagrange(2, 0, 2, 2));
+			}			
+		}
+		else if(funcao == FUNCAO_2)
+		{
+			if(intervalosPositivos)
+			{
+				p.setX(lagrange(2, 0, 6, 1));
+				p.setY(1/lagrange(2, 0, 6, 6));
+			}
+			else
+			{
+				p.setX(- lagrange(2, 1, 6, 1));
+				p.setY(-1 / lagrange(2, 1, 6, 6));				
+			}			
+		}
+		else System.out.println("Deu problema na hora de pegar o Lagrange");
+		this.intervaloAproximacao = p;
+	}
+	
+	
 	public double lagrange(double n,double k, double b, double an)
 	{
 		double pow = n - k;
@@ -358,7 +384,7 @@ public class CN2Unidade {
 	
 	public boolean condicaoDeParada(double erro,double x)
 	{
-		if(f(x) < erro)
+		if(Math.abs(f(x)) < erro)
 		{
 			return true;
 		}
@@ -396,8 +422,11 @@ public class CN2Unidade {
 				}
 			}
 			i++;
+			if(condicaoDeParada(erro, med))
+				break;
 		}
-		while (i < 10000);
+		while (i < 1000);
+		System.out.println("Quantidade de iterações feitas: " + i);
 		return med;
 	}
 	
@@ -433,8 +462,11 @@ public class CN2Unidade {
 				}
 			}
 			i++;
+			if(condicaoDeParada(erro, cn))
+				break;
 		}
 		while (i < 1000);
+		System.out.println("Quantidade de iterações feitas: " + i);
 		return cn;
 	}
 	
@@ -473,8 +505,11 @@ public class CN2Unidade {
 			xapm = g(xap);
 			xap = xapm;
 			i++;
+			if(condicaoDeParada(erro, xap))
+				break;
 		}
-		while(i < 1000);
+		while (i < 1000);
+		System.out.println("Quantidade de iterações feitas: " + i);
 		return xap;		
 	}
 	
@@ -507,8 +542,11 @@ public class CN2Unidade {
 			xn = x - (1/fLinha(x))*f(x);
 			x = xn;
 			i++;
+			if(condicaoDeParada(erro, x))
+				break;
 		}
-		while(i < 1000);		
+		while (i < 1000);
+		System.out.println("Quantidade de iterações feitas: " + i);		
 		return x;
 	}
 	
